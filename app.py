@@ -10,7 +10,7 @@ import re
 nltk.download('punkt')
 nltk.download('stopwords')
 
-st.title('📝 ResumeFit: Compare Your Resume to Job Descriptions Change')
+st.title('📝 ResumeFit: Compare Your Resume to Job Descriptions')
 
 with st.sidebar:
     api_key = st.text_input("Enter your OpenAI API Key:", type="password")
