@@ -1,15 +1,15 @@
-from openai import OpenAI
 import streamlit as st
-import spacy
+from openai import OpenAI
 from collections import Counter
 import re
 
-# Load spaCy model
-@st.cache_resource
-def load_spacy_model():
-    return spacy.load("en_core_web_sm")
-
-nlp = load_spacy_model()
+# Attempt to import spacy
+try:
+    import spacy
+    nlp = spacy.load("en_core_web_sm")
+except ImportError:
+    st.error("Failed to import spaCy. Please make sure it's installed correctly.")
+    st.stop()
 
 st.title('📝 ResumeFit: Compare Your Resume to Job Descriptions')
 
