@@ -1,15 +1,14 @@
-import streamlit as st
 from openai import OpenAI
+import streamlit as st
+import nltk
+from nltk.tokenize import word_tokenize
+from nltk.corpus import stopwords
 from collections import Counter
 import re
 
-# Attempt to import spacy
-try:
-    import spacy
-    nlp = spacy.load("en_core_web_sm")
-except ImportError:
-    st.error("Failed to import spaCy. Please make sure it's installed correctly.")
-    st.stop()
+# Download necessary NLTK data
+nltk.download('punkt')
+nltk.download('stopwords')
 
 st.title('📝 ResumeFit: Compare Your Resume to Job Descriptions')
 
@@ -28,14 +27,15 @@ with col2:
 
 compare_button = st.button("Compare")
 
-# Function for text preprocessing
+# Function for text prepossessing
 def preprocess_text(text):
     # Convert to lowercase and remove punctuation
     text = re.sub(r'[^\w\s]', '', text.lower())
-    # Process with spaCy
-    doc = nlp(text)
-    # Remove stopwords and return lemmatized tokens
-    tokens = [token.lemma_ for token in doc if not token.is_stop and token.is_alpha]
+    # Tokenize
+    tokens = word_tokenize(text)
+    # Remove stopwords
+    stop_words = set(stopwords.words('english'))
+    tokens = [token for token in tokens if token not in stop_words]
     return tokens
 
 # Function for keyword extraction and return the top 10 keywords
@@ -46,7 +46,7 @@ def extract_keywords(text, n=10):
     # Get the n most common words
     return word_freq.most_common(n)
 
-# Function for comparing resume to job description
+# Function for keyword extraction and return the top 10 keywords
 def compare_resume_to_job_description(resume_text, job_description_text, api_key):
     client = OpenAI(api_key=api_key)
     
@@ -139,6 +139,7 @@ if compare_button:
 st.sidebar.info("Note: Your API key is not stored and is only used for this session.")
 st.sidebar.markdown("---")
 st.sidebar.markdown("""
+
 ### How to use:
 1. Paste your resume in the first box (remove your personal information).
 2. Paste the job description in the second box.
