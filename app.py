@@ -8,6 +8,7 @@ import re
 
 # Download necessary NLTK data
 nltk.download('punkt')
+nltk.download('punkt_tab')
 nltk.download('stopwords')
 
 st.title('📝 ResumeFit: Compare Your Resume to Job Descriptions')
