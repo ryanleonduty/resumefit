@@ -6,9 +6,18 @@ from nltk.corpus import stopwords
 from collections import Counter
 import re
 
-# Download necessary NLTK data
-nltk.download('punkt')
-nltk.download('stopwords')
+# Function to download NLTK data
+@st.cache_resource
+def download_nltk_data():
+    try:
+        nltk.data.find('tokenizers/punkt')
+        nltk.data.find('corpora/stopwords')
+    except LookupError:
+        nltk.download('punkt')
+        nltk.download('stopwords')
+
+# Call the function to download NLTK data
+download_nltk_data()
 
 st.title('📝 ResumeFit: Compare Your Resume to Job Descriptions')
 
